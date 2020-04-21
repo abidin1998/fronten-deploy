@@ -34,7 +34,7 @@ export default class home extends Component {
     async consultarPartida() {
         let par = [];
         for (var i = 0; i < 10; i++) {
-            const partida = await axios("/perfil/partida/" + this.state.historial.matches[i].gameId)
+            const partida = await axios("https://servidor-rest-op.herokuapp.com/perfil/partida/" + this.state.historial.matches[i].gameId)
             par.push(partida)
         }
         this.setState({ partida: par })
@@ -42,7 +42,7 @@ export default class home extends Component {
     }
 
     async buscardatos(nombre) {
-        
+
         let res=[];
         let gana=[];
         this.state.partida.map(result => {
@@ -64,7 +64,7 @@ export default class home extends Component {
 
     async tipocola() {
         let cola =[]
-        
+
         for (let index = 0; index < 10; index++) {
            if (this.state.historial.matches[index].queue=="440") {
                cola.push("Clasificatoria Flexible")
@@ -78,11 +78,11 @@ export default class home extends Component {
                 if (this.state.historial.matches[index].queue=="400") {
                     cola.push("Normal")
                     }
-            
-            
+
+
         }
         console.log(cola);
-        
+
         this.setState({cola: cola})
     }
 
@@ -115,7 +115,7 @@ export default class home extends Component {
             else{
                 colorfondo.push("card mb-3 border-danger")
             }
-            
+
         }
         this.setState({kills: kills})
         this.setState({deads: deads})
@@ -124,11 +124,11 @@ export default class home extends Component {
     }
 
     async busqueda(nombre) {
-        const res = await axios("/perfil/" + nombre)
+        const res = await axios("https://servidor-rest-op.herokuapp.com//perfil/" + nombre)
         const champs = await axios("http://ddragon.leagueoflegends.com/cdn/10.7.1/data/es_ES/champion.json")
-        const champmasterymax = await axios("/perfil/maxmastery/" + res.data.id)
-        const historial = await axios("/perfil/historial/" + res.data.accountId)
-        const perfilinfo = await axios("/perfil/info/" + res.data.id)
+        const champmasterymax = await axios("https://servidor-rest-op.herokuapp.com//perfil/maxmastery/" + res.data.id)
+        const historial = await axios("https://servidor-rest-op.herokuapp.com//perfil/historial/" + res.data.accountId)
+        const perfilinfo = await axios("https://servidor-rest-op.herokuapp.com//perfil/info/" + res.data.id)
         console.log(perfilinfo);
         let tier="Unranked"
         let unranked= {tier}
@@ -151,7 +151,7 @@ export default class home extends Component {
             this.setState({ soloq: perfilinfo.data[1]})
         }else{
         }
-        
+
         this.setState({ users: res.data })
         this.setState({ champions: champs.data })
         this.setState({ maxmastery: champmasterymax.data[0].championId })
@@ -176,17 +176,17 @@ export default class home extends Component {
         this.setState({ imagen: require("./dragontail-10.7.1/img/champion/splash/" + this.state.Campeon.id + "_0.jpg") })
 
         await this.consultarPartida()
-        
+
         await this.buscardatos(this.state.users.name)
-        
+
         await this.insertarRutas()
-        
+
         await this.tipocola()
 
         await this.kda()
 
         console.log(this.state.kda);
-        
+
     }
     onInputChange = (e) => {
         this.setState({
