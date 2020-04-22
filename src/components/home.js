@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from "axios"
+import customData from './champs.json';
 export default class home extends Component {
 
     state = {
@@ -124,12 +125,12 @@ export default class home extends Component {
     }
 
     async busqueda(nombre) {
-        const res = await axios("https://servidor-rest-op.herokuapp.com//perfil/" + nombre)
-        const champs = await axios("http://ddragon.leagueoflegends.com/cdn/10.7.1/data/es_ES/champion.json")
-        const champmasterymax = await axios("https://servidor-rest-op.herokuapp.com//perfil/maxmastery/" + res.data.id)
-        const historial = await axios("https://servidor-rest-op.herokuapp.com//perfil/historial/" + res.data.accountId)
-        const perfilinfo = await axios("https://servidor-rest-op.herokuapp.com//perfil/info/" + res.data.id)
-        console.log(perfilinfo);
+        const res = await axios("https://servidor-rest-op.herokuapp.com/perfil/" + nombre)
+       // const champs = await axios("http://ddragon.leagueoflegends.com/cdn/10.7.1/data/es_ES/champion.json")
+        const champmasterymax = await axios("https://servidor-rest-op.herokuapp.com/perfil/maxmastery/" + res.data.id)
+        const historial = await axios("https://servidor-rest-op.herokuapp.com/perfil/historial/" + res.data.accountId)
+        const perfilinfo = await axios("https://servidor-rest-op.herokuapp.com/perfil/info/" + res.data.id)
+        console.log(customData);
         let tier="Unranked"
         let unranked= {tier}
         if(perfilinfo.data.length == "0"){
@@ -153,7 +154,7 @@ export default class home extends Component {
         }
 
         this.setState({ users: res.data })
-        this.setState({ champions: champs.data })
+        this.setState({ champions: customData })
         this.setState({ maxmastery: champmasterymax.data[0].championId })
         this.setState({ championList: this.state.champions.data })
         this.setState({ historial: historial.data })
@@ -162,7 +163,7 @@ export default class home extends Component {
 
         let dataSource = [];
 
-        Object.values(champs.data.data).forEach(item => {
+        Object.values(customData.data).forEach(item => {
             dataSource = dataSource.concat(item);
         });
 
