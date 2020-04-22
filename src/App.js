@@ -14,8 +14,10 @@ function App() {
         <Navegacion/>
         
       <div className="container p-4">
-        <Route path="/home" exact component={Home} />
-        <Route path="/login" component={Login} />
+        <Home/>
+{/* <Route path="/home" exact component={Home} />
+        <Route path="/login" component={Login} />*/}
+        
       </div>
     </Router>
     

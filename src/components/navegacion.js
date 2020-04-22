@@ -5,7 +5,7 @@ export default class navegacion extends Component {
         return (
               <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-3">
                 <div className="container">
-                    <Link className="navbar-brand" to="/home">
+                    <Link className="navbar-brand" to="/">
                          OP.WP
                     </Link>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,7 +14,7 @@ export default class navegacion extends Component {
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item active">
-                                <Link to="/home" className="nav-link">Buscar</Link>
+                                <Link to="/" className="nav-link">Buscar</Link>
                             </li>
                             <li className="nav-item active">
                             </li>
