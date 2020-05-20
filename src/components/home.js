@@ -19,16 +19,16 @@ export default class home extends Component {
         checked: "",
         historial: [],
         partida: [],
-        resultado:[],
-        ganador:[],
+        resultado: [],
+        ganador: [],
         campeoneslista: [],
-        cola: [],
-        kills:[],
-        deads:[],
-        assists:[],
-        colorfondo:[],
-        soloq:"",
-        flexq:"",
+        cola: [],
+        kills: [],
+        deads: [],
+        assists: [],
+        colorfondo: [],
+        soloq: "",
+        flexq: "",
 
     }
 
@@ -44,55 +44,55 @@ export default class home extends Component {
 
     async buscardatos(nombre) {
 
-        let res=[];
-        let gana=[];
+        let res = [];
+        let gana = [];
         this.state.partida.map(result => {
-            result.data.participantIdentities.map(par =>{
+            result.data.participantIdentities.map(par => {
                 if (par.player.summonerName == nombre) {
-                    res.push(result.data.participants[(par.participantId-1)])
-                    if (result.data.participants[(par.participantId-1)].stats.win) {
+                    res.push(result.data.participants[(par.participantId - 1)])
+                    if (result.data.participants[(par.participantId - 1)].stats.win) {
                         gana.push("Victoria")
-                    }else {
+                    } else {
                         gana.push("Derrota")
                     }
                 }
 
             })
         })
-        this.setState({ganador:gana})
-        this.setState({resultado: res})
+        this.setState({ ganador: gana })
+        this.setState({ resultado: res })
     }
 
     async tipocola() {
-        let cola =[]
+        let cola = []
 
         for (let index = 0; index < 10; index++) {
-           if (this.state.historial.matches[index].queue=="440") {
-               cola.push("Clasificatoria Flexible")
-           }
-           if (this.state.historial.matches[index].queue=="420") {
-            cola.push("Clasificatoria Solo/Duo")
+            if (this.state.historial.matches[index].queue == "440") {
+                cola.push("Clasificatoria Flexible")
             }
-            if (this.state.historial.matches[index].queue=="450") {
+            if (this.state.historial.matches[index].queue == "420") {
+                cola.push("Clasificatoria Solo/Duo")
+            }
+            if (this.state.historial.matches[index].queue == "450") {
                 cola.push("ARAM")
-                }
-                if (this.state.historial.matches[index].queue=="400") {
-                    cola.push("Normal")
-                    }
+            }
+            if (this.state.historial.matches[index].queue == "400") {
+                cola.push("Normal")
+            }
 
 
         }
         console.log(cola);
 
-        this.setState({cola: cola})
+        this.setState({ cola: cola })
     }
 
     async insertarRutas() {
-        let campeoneslista=[]
+        let campeoneslista = []
         for (let index = 0; index < 10; index++) {
             this.state.lista.forEach((item, i) => {
                 if (item.key == this.state.resultado[index].championId) {
-                    campeoneslista.push( require("./dragontail-10.7.1/img/champion/tiles/" + item.id + "_0.jpg") )
+                    campeoneslista.push(require("./dragontail-10.7.1/img/champion/tiles/" + item.id + "_0.jpg"))
                 }
             })
 
@@ -102,10 +102,10 @@ export default class home extends Component {
     }
 
     async kda() {
-        let kills=[];
-        let deads=[];
-        let assists=[];
-        let colorfondo=[];
+        let kills = [];
+        let deads = [];
+        let assists = [];
+        let colorfondo = [];
         for (let index = 0; index < 10; index++) {
             kills.push(this.state.resultado[index].stats.kills)
             deads.push(this.state.resultado[index].stats.deaths)
@@ -113,44 +113,44 @@ export default class home extends Component {
             if (this.state.resultado[index].stats.win) {
                 colorfondo.push("card mb-3 border-primary")
             }
-            else{
+            else {
                 colorfondo.push("card mb-3 border-danger")
             }
 
         }
-        this.setState({kills: kills})
-        this.setState({deads: deads})
-        this.setState({assists: assists})
-        this.setState({colorfondo: colorfondo})
+        this.setState({ kills: kills })
+        this.setState({ deads: deads })
+        this.setState({ assists: assists })
+        this.setState({ colorfondo: colorfondo })
     }
 
     async busqueda(nombre) {
         const res = await axios("https://servidor-rest-op.herokuapp.com/perfil/" + nombre)
-       // const champs = await axios("http://ddragon.leagueoflegends.com/cdn/10.7.1/data/es_ES/champion.json")
+        // const champs = await axios("http://ddragon.leagueoflegends.com/cdn/10.7.1/data/es_ES/champion.json")
         const champmasterymax = await axios("https://servidor-rest-op.herokuapp.com/perfil/maxmastery/" + res.data.id)
         const historial = await axios("https://servidor-rest-op.herokuapp.com/perfil/historial/" + res.data.accountId)
         const perfilinfo = await axios("https://servidor-rest-op.herokuapp.com/perfil/info/" + res.data.id)
-        console.log(customData);
-        let tier="Unranked"
-        let unranked= {tier}
-        if(perfilinfo.data.length == "0"){
-            this.setState({ soloq: unranked})
-            this.setState({ flexq: unranked})
-        }else if (perfilinfo.data.length == "1" && perfilinfo.data[0].queueType == "RANKED_SOLO_5x5" ){
-            this.setState({ soloq: perfilinfo.data[0]})
-            this.setState({ flexq: unranked})
+        console.log(perfilinfo);
+        let tier = "Unranked"
+        let unranked = { tier }
+        if (perfilinfo.data.length == "0") {
+            this.setState({ soloq: unranked })
+            this.setState({ flexq: unranked })
+        } else if (perfilinfo.data.length == "1" && perfilinfo.data[0].queueType == "RANKED_SOLO_5x5") {
+            this.setState({ soloq: perfilinfo.data[0] })
+            this.setState({ flexq: unranked })
         }
-        else if (perfilinfo.data.length == "1" && perfilinfo.data[0].queueType == "RANKED_FLEX_SR" ){
-            this.setState({ soloq: unranked})
-            this.setState({ flexq: perfilinfo.data[0]})
+        else if (perfilinfo.data.length == "1" && perfilinfo.data[0].queueType == "RANKED_FLEX_SR") {
+            this.setState({ soloq: unranked })
+            this.setState({ flexq: perfilinfo.data[0] })
         }
         else if (perfilinfo.data[0].queueType == "RANKED_SOLO_5x5" && perfilinfo.data[1].queueType == "RANKED_FLEX_SR") {
-            this.setState({ soloq: perfilinfo.data[0]})
-            this.setState({ flexq: perfilinfo.data[1]})
-        } else if(perfilinfo.data[0].queueType == "RANKED_FLEX_SR" && perfilinfo.data[1].queueType == "RANKED_SOLO_5x5" ){
-            this.setState({ flexq: perfilinfo.data[0]})
-            this.setState({ soloq: perfilinfo.data[1]})
-        }else{
+            this.setState({ soloq: perfilinfo.data[0] })
+            this.setState({ flexq: perfilinfo.data[1] })
+        } else if (perfilinfo.data[0].queueType == "RANKED_FLEX_SR" && perfilinfo.data[1].queueType == "RANKED_SOLO_5x5") {
+            this.setState({ flexq: perfilinfo.data[0] })
+            this.setState({ soloq: perfilinfo.data[1] })
+        } else {
         }
 
         this.setState({ users: res.data })
@@ -201,6 +201,12 @@ export default class home extends Component {
         }
     }
 
+    printRankedlp(lp) {
+        if (lp.leaguePoints != "" && lp.leaguePoints != null) {
+           return <span>,  {lp.leaguePoints} Lp</span>
+        } 
+    }
+
     render() {
         return (
             <div>
@@ -229,33 +235,38 @@ export default class home extends Component {
                         <div className="card-body">
                             <h5 className="card-title">{this.state.users.name}</h5>
                             <p className="card-text">Nivel {this.state.users.summonerLevel}</p>
-                    <p className="text-primary">Solo/Duo: {(this.state.soloq.tier)} {(this.state.soloq.rank)},  {this.state.soloq.leaguePoints} Lp</p>
-                            <p className="text-primary">Flexible: {(this.state.flexq.tier)} {(this.state.flexq.rank)},  {this.state.flexq.leaguePoints} Lp</p>
+                    <p className="text-primary">Solo/Duo: {(this.state.soloq.tier)} {(this.state.soloq.rank)} {this.printRankedlp(this.state.soloq)}</p>
+                            <p className="text-primary">Flexible: {(this.state.flexq.tier)} {(this.state.flexq.rank)} {this.printRankedlp(this.state.flexq)}</p>
                             <p className="card-text"><small className="text-muted">{this.state.Campeon.title}</small></p>
                         </div>
                     </div>
-                    {
-
-                    this.state.partida.map((result,index) => {
+                    {this.state.partida.length != 10 ? <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div> : this.state.partida.map((result, index) => {
                         return (
                             <div className={this.state.colorfondo[index]}>
-                            <div className="row no-gutters">
-                                <div className="col-md-4">
-                                    <img src={this.state.campeoneslista[index]}  className="card-img" alt="..."></img>
-                                </div>
-                                <div className="col-md-8">
-                                    <div className="card-body">
-                                        <h5 className="card-title">{this.state.ganador[index]}</h5>
-                                        <p className="card-text">{this.state.cola[index]} <br></br> {this.state.kills[index]}/
+                                <div className="row no-gutters">
+                                    <div className="col-md-4">
+                                        <img src={this.state.campeoneslista[index]} className="card-img" alt="..."></img>
+                                    </div>
+                                    <div className="col-md-8">
+                                        <div className="card-body">
+                                            <h5 className="card-title">{this.state.ganador[index]}</h5>
+                                            <p className="card-text">{this.state.cola[index]} <br></br> {this.state.kills[index]}/
                                         {this.state.deads[index]}/{this.state.assists[index]}</p>
-                                        <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
+                                            <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         )
+                        
                     })
                     }
+
 
 
                     <footer className="pt-4 my-md-5 pt-md-5 border-top">
